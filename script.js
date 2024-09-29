@@ -134,11 +134,46 @@ if ('showDirectoryPicker' in window) {
 
     // 移动文件
     async function copyFile(fileHandle, targetFolder, fileName) {
-        const file = await fileHandle.getFile();
-        const newFileHandle = await targetFolder.getFileHandle(fileName, { create: true });
-        const writable = await newFileHandle.createWritable();
-        await writable.write(file);
-        await writable.close();
+        const overallStartTime = performance.now();
+        let stageStartTime, stageEndTime;
+
+        try {
+            // 获取文件
+            stageStartTime = performance.now();
+            const file = await fileHandle.getFile();
+            stageEndTime = performance.now();
+            console.log(`获取文件耗时: ${(stageEndTime - stageStartTime).toFixed(2)} 毫秒`);
+
+            // 创建新文件句柄
+            stageStartTime = performance.now();
+            const newFileHandle = await targetFolder.getFileHandle(fileName, { create: true });
+            stageEndTime = performance.now();
+            console.log(`创建新文件句柄耗时: ${(stageEndTime - stageStartTime).toFixed(2)} 毫秒`);
+
+            // 创建可写流
+            stageStartTime = performance.now();
+            const writable = await newFileHandle.createWritable();
+            stageEndTime = performance.now();
+            console.log(`创建可写流耗时: ${(stageEndTime - stageStartTime).toFixed(2)} 毫秒`);
+
+            // 写入文件
+            stageStartTime = performance.now();
+            await writable.write(file);
+            stageEndTime = performance.now();
+            console.log(`写入文件耗时: ${(stageEndTime - stageStartTime).toFixed(2)} 毫秒`);
+
+            // 关闭可写流
+            stageStartTime = performance.now();
+            await writable.close();
+            stageEndTime = performance.now();
+            console.log(`关闭可写流耗时: ${(stageEndTime - stageStartTime).toFixed(2)} 毫秒`);
+
+            const overallEndTime = performance.now();
+            console.log(`文件 ${fileName} 复制完成，总耗时 ${(overallEndTime - overallStartTime).toFixed(2)} 毫秒`);
+        } catch (error) {
+            console.error(`复制文件 ${fileName} 时出错:`, error);
+            throw error;
+        }
     }
 
     // 创建进度条
