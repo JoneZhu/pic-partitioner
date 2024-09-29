@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分片工具</title>
+    <link rel="stylesheet" href="styles.css?v=1.0.3">
+</head>
+<body>
+    <div class="container">
+        <h1>分片工具</h1>
+        
+        <div class="input-group">
+            <button id="selectSourceBtn">选择大图文件夹</button>
+            <input type="text" id="sourcePath" readonly>
+        </div>
+        
+        <div class="input-group">
+            <button id="selectTargetBtn">选择小图文件夹</button>
+            <input type="text" id="targetPath" readonly>
+        </div>
+
+        <div class="input-group">
+            <button id="startCopyBtn">开始复制</button>
+        </div>
+
+        <div id="fileListContainer"></div>
+    </div>
+
+    <script src="script.js?v=1.0.3"></script>
+</body>
+</html>
