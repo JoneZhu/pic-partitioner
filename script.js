@@ -40,11 +40,17 @@ if ('showDirectoryPicker' in window) {
     let source_folder = null;
     let target_folder = null;
 
+    // 从localStorage加载上次选择的目录
+    const lastSourceDir = localStorage.getItem('lastSourceDir');
+    const lastTargetDir = localStorage.getItem('lastTargetDir');
+
     // 选择源文件夹
     selectSourceBtn.addEventListener('click', async () => {
         try {
+            const startIn = lastSourceDir ? { startIn: lastSourceDir } : undefined;
             source_folder = await window.showDirectoryPicker();
             sourcePathInput.value = source_folder.name;
+            localStorage.setItem('lastSourceDir', source_folder.name);
         } catch (err) {
             console.error('选择源文件夹时出错:', err);
         }
@@ -53,8 +59,10 @@ if ('showDirectoryPicker' in window) {
     // 选择目标文件夹
     selectTargetBtn.addEventListener('click', async () => {
         try {
+            const startIn = lastTargetDir ? { startIn: lastTargetDir } : undefined;
             target_folder = await window.showDirectoryPicker();
             targetPathInput.value = target_folder.name;
+            localStorage.setItem('lastTargetDir', target_folder.name);
         } catch (err) {
             console.error('选择目标文件夹时出错:', err);
         }
@@ -68,18 +76,18 @@ if ('showDirectoryPicker' in window) {
         }
 
         try {
-            // 创建进度条
-            const progressBar = createProgressBar();
-            document.body.appendChild(progressBar);
+            // 创建进度条和蒙层
+            const overlay = createProgressBar();
+            document.body.appendChild(overlay);
 
-            await processFiles(progressBar);
+            await processFiles(overlay.querySelector('#progressBar'));
         } catch (err) {
             console.error('处理文件时出错:', err);
         } finally {
-            // 移除进度条
-            const progressBar = document.getElementById('progressBar');
-            if (progressBar) {
-                progressBar.remove();
+            // 移除蒙层和进度条
+            const overlay = document.getElementById('overlay');
+            if (overlay) {
+                overlay.remove();
             }
         }
     });
@@ -198,8 +206,22 @@ if ('showDirectoryPicker' in window) {
         }
     }
 
-    // 创建进度条
+    // 创建进度条和蒙层
     function createProgressBar() {
+        // 创建蒙层
+        const overlay = document.createElement('div');
+        overlay.id = 'overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        `;
+
+        // 创建进度条容器
         const progressBarContainer = document.createElement('div');
         progressBarContainer.id = 'progressBar';
         progressBarContainer.style.cssText = `
@@ -212,8 +234,10 @@ if ('showDirectoryPicker' in window) {
             background-color: #f0f0f0;
             border-radius: 5px;
             overflow: hidden;
+            z-index: 1000;
         `;
 
+        // ... 其余进度条代码保持不变 ...
         const progressBarFill = document.createElement('div');
         progressBarFill.style.cssText = `
             width: 0%;
@@ -230,12 +254,20 @@ if ('showDirectoryPicker' in window) {
             transform: translate(-50%, -50%);
             color: #000;
             font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 90%;
+            text-align: center;
         `;
 
         progressBarContainer.appendChild(progressBarFill);
         progressBarContainer.appendChild(progressText);
 
-        return progressBarContainer;
+        // 将进度条添加到蒙层中
+        overlay.appendChild(progressBarContainer);
+
+        return overlay;
     }
 
     // 更新进度条
@@ -245,7 +277,16 @@ if ('showDirectoryPicker' in window) {
         const progressText = progressBar.lastChild;
 
         progressBarFill.style.width = `${percentage}%`;
-        progressText.textContent = `处理中: ${fileName} (${current}/${total})`;
+        
+        // 限制文件名长度，超过部分用省略号替代
+        const maxLength = 20; // 你可以根据需要调整这个值
+        let displayFileName = fileName;
+        if (fileName.length > maxLength) {
+            displayFileName = fileName.substring(0, maxLength - 3) + '...';
+        }
+        
+        progressText.textContent = `${displayFileName} (${current}/${total})`;
+        progressText.title = fileName; // 添加完整文件名作为提示
     }
 
 } else {
