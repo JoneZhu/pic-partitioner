@@ -1,0 +1,22 @@
+name: Deploy HTML project to Baota Panel
+
+on:
+  push:
+    branches:
+      - main  # 或者你使用的是 master 分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Rsync files
+      run: rsync -avz --delete ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
+
