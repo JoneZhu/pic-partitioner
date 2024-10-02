@@ -5,7 +5,7 @@ function displayMessage(message) {
     messageContainer.textContent = message;
     messageContainer.style.cssText = `
         position: fixed;
-        top: 20%;
+        top: 10%;
         left: 50%;
         transform: translate(-50%, -50%);
         background-color: rgba(255, 0, 0, 0.2);
