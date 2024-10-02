@@ -3,7 +3,29 @@ function displayMessage(message) {
     const messageContainer = document.createElement('div');
     messageContainer.className = 'message';
     messageContainer.textContent = message;
+    messageContainer.style.cssText = `
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 0, 0, 0.2);
+        color: red;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        z-index: 1000;
+        max-width: 80%;
+    `;
     document.body.appendChild(messageContainer);
+
+    // 禁用按钮
+    const buttons = ['selectSourceBtn', 'selectTargetBtn', 'startCopyBtn'];
+    buttons.forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.disabled = true;
+        }
+    });
 }
 
 // 检查浏览器是否支持 Native File System API
