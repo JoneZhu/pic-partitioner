@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="styles.css?v=1.0.3">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <style>
+        .title {
+            color: #545353; /* 浅灰色 */
+            text-align: center;
+            padding-bottom: 10px;
+            position: relative;
+        }
+        .title::after {
+            content: '';
+            display: block;
+            width: 80%;
+            height: 1px;
+            background-color: #D3D3D3; /* 浅灰色 */
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
