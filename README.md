@@ -11,6 +11,10 @@ https://fp.sheyingjia.top/
 2. 选择小图文件夹
 3. 点击开始复制
 
+### 分片前
+![分片前](https://fp.sheyingjia.top/images/%E5%88%86%E7%89%87%E5%89%8D.png)
+### 分片后
+![分片后](https://fp.sheyingjia.top/images/%E5%88%86%E7%89%87%E5%90%8E.png)
 ## 注意事项
 1. 大图文件夹和小图文件夹不能相同
 2. 大图文件夹和小图文件夹不能为空
