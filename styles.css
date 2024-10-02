@@ -9,6 +9,10 @@ body {
     height: 100vh;
 }
 
+.title {
+    color: #808080; /* 浅灰色 */
+}
+
 .container {
     background-color: #fff;
     padding: 20px;
