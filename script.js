@@ -227,5 +227,5 @@ if ('showDirectoryPicker' in window) {
     }
 
 } else {
-    displayMessage('您的浏览器不支持 Native File System API，无法使用此功能。');
+    displayMessage('您的浏览器不支持 Native File System API，无法使用此功能。请在Mac或Win上使用chrome浏览器中打开');
 }
