@@ -9,6 +9,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    - name: Check formatted output
+      run: |
+        echo "Username: ${{ secrets.SSH_USERNAME }}x"
+        echo "Host: ${{ secrets.SSH_HOST }}x"
+        echo "Path: ${{ secrets.DEPLOY_PATH }}x"
     - name: Checkout code
       uses: actions/checkout@v2
 
