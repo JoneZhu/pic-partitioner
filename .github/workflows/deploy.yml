@@ -25,5 +25,5 @@ jobs:
         ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "echo 'SSH connection successful'"
 
     - name: Rsync files detail
-      run: rsync -avz --delete --exclude '.git/' --exclude '.github/' --exclude 'README.md' --ignore-errors --partial --verbose -e "ssh -vvv" ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
+      run: rsync -avz --delete --exclude '.git/' --exclude '.github/' --exclude 'README.md' --exclude '.gitignore' --exclude='.user.ini' --ignore-errors --partial --verbose --quiet -e "ssh -vvv" ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
 
